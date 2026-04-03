@@ -55,6 +55,18 @@ variable "db_subnet_cidr" {
   default     = "192.168.5.0/24"
 }
 
+variable "db_subnet_1a_cidr" {
+  description = "CIDR block for database subnet in AZ1"
+  type        = string
+  default     = "192.168.5.0/24"
+}
+
+variable "db_subnet_1b_cidr" {
+  description = "CIDR block for database subnet in AZ2"
+  type        = string
+  default     = "192.168.6.0/24"
+}
+
 variable "az_1" {
   description = "First Availability Zone"
   type        = string
@@ -159,13 +171,13 @@ variable "allocated_storage" {
 variable "backup_retention_period" {
   description = "Backup retention period in days"
   type        = number
-  default     = 7
+  default     = 0  # Changed to 0 for free tier compatibility
 }
 
 variable "rds_multi_az" {
   description = "Enable Multi-AZ deployment for RDS"
   type        = bool
-  default     = true
+  default     = false  # Disabled for free tier
 }
 
 variable "rds_deletion_protection" {

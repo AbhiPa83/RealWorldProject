@@ -56,13 +56,22 @@ resource "aws_subnet" "proj_subnet_private_1b" {
   }
 }
 
-# Database Subnet
-resource "aws_subnet" "proj_subnet_db" {
+# Database Subnets in 2 AZs
+resource "aws_subnet" "proj_subnet_db_1a" {
   vpc_id            = aws_vpc.proj_vpc.id
-  cidr_block        = var.db_subnet_cidr
+  cidr_block        = var.db_subnet_1a_cidr
   availability_zone = var.az_1
   tags = {
-    Name = "DB-Subnet"
+    Name = "DB-Subnet-AZ1"
+  }
+}
+
+resource "aws_subnet" "proj_subnet_db_1b" {
+  vpc_id            = aws_vpc.proj_vpc.id
+  cidr_block        = var.db_subnet_1b_cidr
+  availability_zone = var.az_2
+  tags = {
+    Name = "DB-Subnet-AZ2"
   }
 }
 
@@ -163,7 +172,7 @@ resource "aws_route_table_association" "private_1b_assoc" {
   route_table_id = aws_route_table.private_rt_1b.id
 }
 
-# Route Table for Database Subnet
+# Route Table for Database Subnets
 resource "aws_route_table" "db_rt" {
   vpc_id = aws_vpc.proj_vpc.id
   tags = {
@@ -171,7 +180,12 @@ resource "aws_route_table" "db_rt" {
   }
 }
 
-resource "aws_route_table_association" "db_assoc" {
-  subnet_id      = aws_subnet.proj_subnet_db.id
+resource "aws_route_table_association" "db_1a_assoc" {
+  subnet_id      = aws_subnet.proj_subnet_db_1a.id
+  route_table_id = aws_route_table.db_rt.id
+}
+
+resource "aws_route_table_association" "db_1b_assoc" {
+  subnet_id      = aws_subnet.proj_subnet_db_1b.id
   route_table_id = aws_route_table.db_rt.id
 }

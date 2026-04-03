@@ -8,6 +8,22 @@ terraform {
   }
 }
 
+# Data source for Amazon Linux 2 AMI
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
 provider "aws" {
   region = var.aws_region
 
@@ -29,7 +45,8 @@ module "vpc" {
   public_subnet_1b_cidr  = var.public_subnet_1b_cidr
   private_subnet_1a_cidr = var.private_subnet_1a_cidr
   private_subnet_1b_cidr = var.private_subnet_1b_cidr
-  db_subnet_cidr         = var.db_subnet_cidr
+  db_subnet_1a_cidr      = var.db_subnet_1a_cidr
+  db_subnet_1b_cidr      = var.db_subnet_1b_cidr
   az_1                   = var.az_1
   az_2                   = var.az_2
 }
@@ -83,7 +100,7 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 module "ec2" {
   source = "./modules/ec2"
 
-  ami_id                    = var.ami_id
+  ami_id                    = data.aws_ami.amazon_linux_2.id
   instance_type             = var.instance_type
   bastion_instance_type     = var.bastion_instance_type
   instance_profile_name     = aws_iam_instance_profile.ec2_profile.name
@@ -122,7 +139,7 @@ module "autoscaling" {
 module "rds" {
   source = "./modules/rds"
 
-  db_subnet_ids              = [module.vpc.db_subnet_id]
+  db_subnet_ids              = [module.vpc.db_subnet_1a_id, module.vpc.db_subnet_1b_id]
   mysql_security_group_id    = module.security_groups.mysql_sg_id
   db_identifier              = var.db_identifier
   db_name                    = var.db_name

@@ -54,13 +54,13 @@ variable "allocated_storage" {
 variable "backup_retention_period" {
   description = "Backup retention period in days"
   type        = number
-  default     = 7
+  default     = 0  # Changed to 0 for free tier compatibility
 }
 
 variable "multi_az" {
   description = "Enable Multi-AZ deployment"
   type        = bool
-  default     = true
+  default     = false  # Disabled for free tier
 }
 
 variable "deletion_protection" {

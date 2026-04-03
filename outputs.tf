@@ -30,9 +30,14 @@ output "private_subnet_1b_id" {
   value       = module.vpc.private_subnet_1b_id
 }
 
-output "db_subnet_id" {
-  description = "Database Subnet ID"
-  value       = module.vpc.db_subnet_id
+output "db_subnet_1a_id" {
+  description = "Database Subnet AZ1 ID"
+  value       = module.vpc.db_subnet_1a_id
+}
+
+output "db_subnet_1b_id" {
+  description = "Database Subnet AZ2 ID"
+  value       = module.vpc.db_subnet_1b_id
 }
 
 # Security Group Outputs

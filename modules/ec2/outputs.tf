@@ -5,7 +5,7 @@ output "launch_template_id" {
 
 output "launch_template_latest_version" {
   description = "Launch Template latest version"
-  value       = aws_launch_template.app_launch_template.latest_version_number
+  value       = aws_launch_template.app_launch_template.latest_version
 }
 
 output "bastion_public_ip" {

@@ -28,9 +28,14 @@ output "private_subnet_1b_id" {
   value       = aws_subnet.proj_subnet_private_1b.id
 }
 
-output "db_subnet_id" {
-  description = "Database subnet ID"
-  value       = aws_subnet.proj_subnet_db.id
+output "db_subnet_1a_id" {
+  description = "Database subnet AZ1 ID"
+  value       = aws_subnet.proj_subnet_db_1a.id
+}
+
+output "db_subnet_1b_id" {
+  description = "Database subnet AZ2 ID"
+  value       = aws_subnet.proj_subnet_db_1b.id
 }
 
 output "igw_id" {
