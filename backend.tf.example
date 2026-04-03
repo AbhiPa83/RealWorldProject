@@ -1,0 +1,42 @@
+# This file shows how to configure remote state storage in S3
+# Uncomment and modify as needed for your team/production setup
+
+# Step 1: Create S3 bucket manually (one time only)
+# aws s3 mb s3://your-terraform-state-bucket --region ap-south-1
+# aws s3api put-bucket-versioning \
+#   --bucket your-terraform-state-bucket \
+#   --versioning-configuration Status=Enabled
+# aws s3api put-bucket-encryption \
+#   --bucket your-terraform-state-bucket \
+#   --server-side-encryption-configuration '{
+#     "Rules": [{
+#       "ApplyServerSideEncryptionByDefault": {
+#         "SSEAlgorithm": "AES256"
+#       }
+#     }]
+#   }'
+
+# Step 2: Create DynamoDB table for state locking (optional but recommended)
+# aws dynamodb create-table \
+#   --table-name terraform-state-lock \
+#   --attribute-definitions AttributeName=LockID,AttributeType=S \
+#   --key-schema AttributeName=LockID,KeyType=HASH \
+#   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
+#   --region ap-south-1
+
+# Step 3: Uncomment the configuration below
+
+# terraform {
+#   backend "s3" {
+#     bucket         = "your-terraform-state-bucket"
+#     key            = "realworld-project/terraform.tfstate"
+#     region         = "ap-south-1"
+#     encrypt        = true
+#     dynamodb_table = "terraform-state-lock"
+#   }
+# }
+
+# After uncommenting:
+# 1. Run: terraform init
+# 2. Terraform will migrate state from local to S3
+# 3. Your state will now be managed remotely and securely
