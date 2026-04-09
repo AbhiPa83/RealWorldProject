@@ -1,7 +1,7 @@
 resource "aws_launch_template" "lt" {
   name_prefix   = "app-lt"
   image_id      = "ami-0f5ee92e2d63afc18"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 
   key_name               = var.key_name
   vpc_security_group_ids = [var.sg_id]
