@@ -1,5 +1,3 @@
 variable "sg_id" {}
-variable "key_name" {
-    default = "LinuxTest"
-}
+variable "key_name" {}
 variable "db_endpoint" {}
