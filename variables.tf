@@ -3,7 +3,7 @@ variable "region" {
 }
 
 variable "key_name" {
-  default = "Linux_Key"
+  default = "Add_Key_Name"
 }
 
 variable "db_password" {
